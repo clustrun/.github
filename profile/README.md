@@ -7,7 +7,7 @@ Three binaries, zero external dependencies:
 - **workerd** — container lifecycle, embedded mesh proxy, embedded DNS
 - **gatewayd** — dual-homed ingress proxy, WebSocket gateway
 
-Containers talk plain HTTP. The mesh is transparent — your app just does `GET http://other-service/` and clust handles identity, encryption, and routing.
+Your app just makes HTTP calls. Each container gets a private point-to-point link to its host — no shared bridge, no network to sniff. Between nodes, every connection is mTLS. No TLS config in your app.
 
 ## Install
 
