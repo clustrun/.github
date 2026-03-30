@@ -10,12 +10,6 @@ Your app just makes HTTP calls. Each container gets a private point-to-point lin
 curl -sfL https://raw.githubusercontent.com/clustrun/install/main/install.sh | sh
 ```
 
-Or a specific version:
-
-```sh
-curl -sfL https://raw.githubusercontent.com/clustrun/install/main/install.sh | sh -s -- 0.1.0
-```
-
 ## Quick Start
 
 ```sh
