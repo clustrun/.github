@@ -18,4 +18,5 @@ clust create mycluster --quick          # Docker defaults, no wizard
 clust up                                # pulls images, starts cluster
 clust deploy hello.demo.internal traefik/whoami:v1.11.0 --health-path /health
 clust curl https://hello.demo.internal/
+clust top                               # live cluster dashboard
 ```
