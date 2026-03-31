@@ -13,10 +13,11 @@ curl -sfL https://raw.githubusercontent.com/clustrun/install/main/install.sh | s
 ## Quick Start
 
 ```sh
-clust init                              # one-time user setup
-clust create mycluster --quick          # Docker defaults, no wizard
-clust up                                # pulls images, starts cluster
-clust deploy hello.demo.internal traefik/whoami:v1.11.0 --health-path /health
+clust init                                              # one-time user setup
+clust create mycluster --quick                          # Docker defaults, no wizard
+clust up                                                # pull images, start cluster
+clust service init hello.demo.internal --image=traefik/whoami:v1.11.0
+clust sync                                              # deploy to cluster
 clust curl https://hello.demo.internal/
-clust top                               # live cluster dashboard
+clust top                                               # live cluster dashboard
 ```
