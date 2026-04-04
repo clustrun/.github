@@ -17,7 +17,14 @@ clust init                                              # one-time user setup
 clust create mycluster --quick                          # Docker defaults, no wizard
 clust up                                                # pull images, start cluster
 clust service init hello.demo.internal --image=traefik/whoami:v1.11.0
-clust sync                                              # deploy to cluster
+clust service deploy hello.demo.internal                # seal draft + deploy
 clust curl https://hello.demo.internal/
-clust top                                               # live cluster dashboard
+```
+
+## Ship a New Version
+
+```sh
+clust service set hello.demo.internal --image=traefik/whoami:v1.12.0
+clust diff                                              # review pending changes
+clust service deploy hello.demo.internal                # seal + deploy
 ```
