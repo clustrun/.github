@@ -10,21 +10,71 @@ Your app just makes HTTP calls. Each container gets a private point-to-point lin
 curl -sfL https://raw.githubusercontent.com/clustrun/install/main/install.sh | sh
 ```
 
-## Quick Start
+## Get Started
 
 ```sh
-clust init                                              # one-time user setup
-clust create mycluster --quick                          # Docker defaults, no wizard
-clust up                                                # pull images, start cluster
-clust service init hello.demo.internal --image=traefik/whoami:v1.11.0
-clust service deploy hello.demo.internal                # seal draft + deploy
-clust curl https://hello.demo.internal/
+clust create mycluster --quick                          # create cluster + start it
+clust service canary.demo.internal deploy --image=clust-canary:latest
+clust curl https://canary.demo.internal/
 ```
 
-## Ship a New Version
+## Deploy a New Version
 
 ```sh
-clust service set hello.demo.internal --image=traefik/whoami:v1.12.0
-clust diff                                              # review pending changes
-clust service deploy hello.demo.internal                # seal + deploy
+clust service canary.demo.internal deploy --image=clust-canary:v2
+```
+
+## Deploy Safely
+
+Review before pushing:
+
+```sh
+clust service canary.demo.internal set --image=clust-canary:v3
+clust service canary.demo.internal diff                 # review changes
+clust service canary.demo.internal deploy
+```
+
+Test alongside production with a canary branch:
+
+```sh
+clust service canary.demo.internal branch next --image=clust-canary:v3 --weight=10
+clust service canary.demo.internal deploy               # 90% primary, 10% next
+clust curl https://next.canary.demo.internal/health     # test the branch directly
+clust service canary.demo.internal promote next         # next becomes primary
+clust service canary.demo.internal deploy               # deploy promoted config
+```
+
+## Experiment
+
+Blue/green with a dark branch:
+
+```sh
+clust service canary.demo.internal branch green --image=clust-canary:v4
+clust service canary.demo.internal deploy               # green running, 0% traffic
+
+clust curl https://green.canary.demo.internal/health    # test the dark branch
+
+clust service canary.demo.internal set green --weight=100
+clust service canary.demo.internal deploy               # 0% primary, 100% green
+
+clust service canary.demo.internal promote green        # green becomes primary
+clust service canary.demo.internal deploy
+```
+
+## Control What a Service Can Reach
+
+```sh
+clust service canary.demo.internal egress https://checkip.amazonaws.com/
+clust service canary.demo.internal deploy
+clust curl https://canary.demo.internal/myip            # works
+clust service canary.demo.internal egress --rm https://checkip.amazonaws.com/
+clust service canary.demo.internal deploy
+clust curl https://canary.demo.internal/myip            # blocked
+```
+
+## Expose to the Internet
+
+```sh
+clust service canary.demo.internal ingress https://canary.example.com/
+clust service canary.demo.internal deploy
 ```
