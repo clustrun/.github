@@ -14,14 +14,14 @@ curl -sfL https://raw.githubusercontent.com/clustrun/install/main/install.sh | s
 
 ```sh
 clust create mycluster --quick                          # create cluster + start it
-clust service canary.demo.internal deploy --image=clust-canary:latest
+clust service canary.demo.internal deploy --image=traefik/whoami:v1.8
 clust curl https://canary.demo.internal/
 ```
 
 ## Deploy a New Version
 
 ```sh
-clust service canary.demo.internal deploy --image=clust-canary:v2
+clust service canary.demo.internal deploy --image=traefik/whoami:v1.9
 ```
 
 ## Deploy Safely
@@ -29,7 +29,7 @@ clust service canary.demo.internal deploy --image=clust-canary:v2
 Review before pushing:
 
 ```sh
-clust service canary.demo.internal set --image=clust-canary:v3
+clust service canary.demo.internal set --image=traefik/whoami:v1.10
 clust service canary.demo.internal diff                 # review changes
 clust service canary.demo.internal deploy
 ```
@@ -37,7 +37,7 @@ clust service canary.demo.internal deploy
 Test alongside production with a canary branch:
 
 ```sh
-clust service canary.demo.internal branch next --image=clust-canary:v3 --weight=10
+clust service canary.demo.internal branch next --image=traefik/whoami:v1.10 --weight=10
 clust service canary.demo.internal deploy               # 90% primary, 10% next
 clust curl https://next.canary.demo.internal/health     # test the branch directly
 clust service canary.demo.internal promote next         # next becomes primary
@@ -49,7 +49,7 @@ clust service canary.demo.internal deploy               # deploy promoted config
 Blue/green with a dark branch:
 
 ```sh
-clust service canary.demo.internal branch green --image=clust-canary:v4
+clust service canary.demo.internal branch green --image=traefik/whoami:v1.11
 clust service canary.demo.internal deploy               # green running, 0% traffic
 
 clust curl https://green.canary.demo.internal/health    # test the dark branch
