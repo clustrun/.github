@@ -71,10 +71,3 @@ clust service canary.demo.internal egress --rm https://checkip.amazonaws.com/
 clust service canary.demo.internal deploy
 clust curl https://canary.demo.internal/myip            # blocked
 ```
-
-## Expose to the Internet
-
-```sh
-clust service canary.demo.internal ingress https://canary.example.com/
-clust service canary.demo.internal deploy
-```
